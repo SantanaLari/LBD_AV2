@@ -29,22 +29,22 @@ PRIMARY KEY(CodigoTimeA, CodigoTimeB)
 )
 go
 INSERT INTO times VALUES
-(1, 'Corinthians', 'S„o Paulo', 'Neo QuÌmica Arena'),
-(2, 'Palmeiras', 'S„o Paulo', 'Allanz Parque'),
+(1, 'Corinthians', 'S√£o Paulo', 'Neo Qu√≠mica Arena'),
+(2, 'Palmeiras', 'S√£o Paulo', 'Allanz Parque'),
 (3, 'Santos', 'Santos', 'Vila Belmiro'),
-(4, 'S„o Paulo', 'S„o Paulo', 'Morumbi'),
-(5, 'Botafogo-SP', 'Ribeir„o Preto', 'Santa Cruz'),
-(6, 'Ferrovi·ria', 'Araraquara', 'Fonte Luminosa'),
+(4, 'S√£o Paulo', 'S√£o Paulo', 'Morumbi'),
+(5, 'Botafogo-SP', 'Ribeir√£o Preto', 'Santa Cruz'),
+(6, 'Ferrovi√°ria', 'Araraquara', 'Fonte Luminosa'),
 (7, 'Guarani', 'Campinas', 'Brinco de Ouro'),
-(8, 'Inter de Limeira', 'Limeira', 'Limeir„o'),
-(9, 'Ituano', 'Itu', 'Novelli J˙nior'),
-(10, 'Mirassol', 'Mirassol', 'JosÈ Maria de Campos Maia'),
+(8, 'Inter de Limeira', 'Limeira', 'Limeir√£o'),
+(9, 'Ituano', 'Itu', 'Novelli J√∫nior'),
+(10, 'Mirassol', 'Mirassol', 'Jos√© Maria de Campos Maia'),
 (11, 'Novorizontino', 'Novo Horizonte', 'Jorge Ismael de Biasi'),
-(12, 'Ponte Preta', 'Campinas', 'MoisÈs Lucarelli'),
-(13, 'Red Bull Bragantino', 'BraganÁa Paulista', 'Nabi Abi Chedid'),
-(14, 'Santo AndrÈ', 'Santo AndrÈ', 'Bruno JosÈ Daniel'),
-(15, 'S„o Bento', 'Sorocaba', 'Walter Ribeiro'),
-(16, 'S„o Caetano', 'S„o Caetano do Sul', 'Anacletto Campanella')
+(12, 'Ponte Preta', 'Campinas', 'Mois√©s Lucarelli'),
+(13, 'Red Bull Bragantino', 'Bragan√ßa Paulista', 'Nabi Abi Chedid'),
+(14, 'Santo Andr√©', 'Santo Andr√©', 'Bruno Jos√© Daniel'),
+(15, 'S√£o Bento', 'Sorocaba', 'Walter Ribeiro'),
+(16, 'S√£o Caetano', 'S√£o Caetano do Sul', 'Anacletto Campanella')
 
 CREATE PROCEDURE p_geraGrupos_1 (@grupo1 CHAR(1), @grupo2 CHAR(1), 
 								 @grupo3 CHAR(1), @grupo4 CHAR(1))
@@ -292,7 +292,7 @@ AS BEGIN
 	RETURN
 END
 
---FUN«√O QUE MOSTRA A CLASSIFICA«√O GERAL
+--FUN√á√ÉO QUE MOSTRA A CLASSIFICA√á√ÉO GERAL
 CREATE FUNCTION fn_placarGeral()
 RETURNS @pGeral TABLE (
 nomeTime VARCHAR(50),
@@ -323,8 +323,17 @@ select TOP(2) * from fn_placarGeral()
 WHERE gols_marcados IS NOT NULL
 ORDER BY vitorias ASC, gols_marcados ASC, saldo_gols ASC
 
+-- QUARTAS DE FINAL
+CRIAR  FUN√á√ÉO fn_quartas(@grupo CHAR ( 1 ))
+RETORNOS @table TABLE (
+nomeTime VARCHAR ( 100 )
+)
+COMO
+COME√áAR
+	INSERIR  NA @tabela
+	SELECT  TOP ( 2 ) nomeTime FROM fn_placarGrupo(@grupo) ORDER POR pontos DESC , vit√≥rias DESC , gols_marcados DESC , saldo_gols DESC
+	RETORNA
+FIM
 
-
-
-
-
+-- teste
+SELECT  *  FROM fn_quartas( ' A' )
