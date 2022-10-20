@@ -139,6 +139,202 @@ INSERT INTO jogos VALUES
 (6, 5, 1, 0, '15-02-2001'),
 (3, 1, 2, 5, '19-02-2001')
 
+/*************************************************** PROCEDURE PARA DATAS ******************/
+CREATE PROCEDURE pd_data(@data DATE)
+AS
+	DECLARE @aux DATE
+	--Se for domingo, próximo dia de jogo é daqui a 3 dias
+	IF(DATEPART(WEEKDAY, @data) = 1) 
+	BEGIN
+		SET @aux = DATEADD(DAY, 3, @data)
+		SET @aux = CONVERT(VARCHAR(10), @aux)
+		SET @data = @aux
+		PRINT @data  
+	END
+	--Se for quarta-feira, próximo dia de jogo é daqui a 4 dias
+	ELSE
+	BEGIN
+		SET @aux = DATEADD(DAY, 4, @data)
+		SET @aux = CONVERT(VARCHAR(10), @aux)
+		SET @data = @aux
+		PRINT @data 
+	END
+
+EXEC pd_data @data = '09/02/2022'
+
+/***************************************** PROCEDURE PARA CRIAR JOGOS ***********************/
+CREATE PROCEDURE pro_geraJogosT1 (@cont INT, @time1 INT, @parm1 INT, @parm2 INT, @parm3 INT, @data DATE)
+AS
+	DECLARE @timeA INT,
+			@timeB INT
+	WHILE @cont <= 16 
+	BEGIN
+		SET @timeA = @time1
+		IF (@cont = @parm1 or @cont = @parm2 or @cont = @parm3)
+		BEGIN
+			SET @cont = @cont + 1
+		END
+		ELSE
+		BEGIN
+			SET @timeB = @cont
+			EXEC pd_data @data
+			INSERT INTO jogos VALUES
+			(@timeA, @timeB, NULL, NULL, @data)
+			SET @cont = @cont + 1
+		END
+	END
+/**************************************** PROCEDURE PARA AUXILIAR A CRIAR JOGOS ***********************/
+CREATE PROCEDURE pro_geraJogosT2 (@cont INT, @time1 INT, @parm1 INT, @parm2 INT, @data DATE)
+AS
+	DECLARE @timeA INT,
+			@timeB INT
+	WHILE @cont <= 16 
+	BEGIN
+		SET @timeA = @time1
+		IF (@cont = @parm1 or @cont = @parm2)
+		BEGIN
+			SET @cont = @cont + 1
+		END
+		ELSE
+		BEGIN
+			SET @timeB = @cont
+			EXEC pd_data @data
+			INSERT INTO jogos VALUES
+			(@timeA, @timeB, NULL, NULL, @data)
+			SET @cont = @cont + 1
+		END
+	END
+
+/*************************************************** PROCEDURE PARA AUXILIAR A CRIAR JOGOS ******************/
+CREATE PROCEDURE pro_geraJogosT3 (@cont INT, @time1 INT, @parm1 INT, @data DATE)
+AS
+	DECLARE @timeA INT,
+			@timeB INT
+	WHILE @cont <= 16 
+	BEGIN
+		SET @timeA = @time1
+		IF (@cont = @parm1)
+		BEGIN
+			SET @cont = @cont + 1
+		END
+		ELSE
+		BEGIN
+			SET @timeB = @cont
+			EXEC pd_data @data
+			INSERT INTO jogos VALUES
+			(@timeA, @timeB, NULL, NULL, @data)
+			SET @cont = @cont + 1
+		END
+	END
+
+/*************************************************** PROCEDURE PARA AUXILIAR A CRIAR JOGOS ******************/
+CREATE PROCEDURE pro_geraJogosT4 (@cont INT, @time1 INT, @data DATE)
+AS
+	DECLARE @timeA INT,
+			@timeB INT
+	WHILE @cont <= 16 
+	BEGIN
+		SET @timeA = @time1
+		BEGIN
+			SET @timeB = @cont
+			EXEC pd_data @data
+			INSERT INTO jogos VALUES
+			(@timeA, @timeB, NULL, NULL, @data)
+			SET @cont = @cont + 1
+		END
+	END
+
+/****************************************************** GERAR PARTIDAS ********************************/
+CREATE PROCEDURE pro_partidasT1
+AS
+	DECLARE @timeA INT,
+			@timeB INT,
+			@cont INT,
+			@cont1 INT,
+			@dataUltimo DATE,
+			@data DATE
+SET @cont1 = 5	
+SET @dataUltimo = '23/02/2022'
+
+--CABEÇAS
+	INSERT INTO jogos VALUES
+	(1,2,NULL,NULL,'06/02/2022'),
+	(1,3,NULL,NULL,'09/02/2022'),
+	(1,4,NULL,NULL,'13/02/2022'),
+	(2,3,NULL,NULL,'13/02/2022'),
+	(2,4,NULL,NULL,'09/02/2022'),
+	(3,4,NULL,NULL,'06/02/2022')
+
+--RESTO 1
+	EXEC pro_geraJogosT1 5 , 1, 12, 14, 16, '13/02/2022'
+
+--RESTO 2
+	EXEC pro_geraJogosT1 5 , 2, 11, 13, 15, '13/02/2022'
+
+--RESTO 3
+	EXEC pro_geraJogosT1 5 , 3, 6, 8, 10, '13/02/2022'
+
+--RESTO 4
+	EXEC pro_geraJogosT1 5 , 4, 5, 7, 9, '13/02/2022'
+
+--RESTO 5
+	EXEC pro_geraJogosT2 6, 5, 7, 9, '16/02/2022'
+
+--RESTO 6
+	EXEC pro_geraJogosT2 7, 6, 8, 10, '16/02/2022'
+
+--RESTO 7
+	EXEC pro_geraJogosT3 8, 7, 9, '16/02/2022'
+
+--RESTO 8
+	EXEC pro_geraJogosT3 9, 8, 10, '16/02/2022'
+
+--RESTO 9
+	EXEC pro_geraJogosT4 10, 9, '20/02/2022'
+	
+--RESTO 11
+	EXEC pro_geraJogosT4 11, 10, '20/02/2022'
+
+--RESTO 12
+	EXEC pro_geraJogosT4 12, 11, '20/02/2022'
+
+--RESTO 13
+	EXEC pro_geraJogosT4 13, 12, '20/02/2022'
+
+--QUARTAS DE FINAL 
+CREATE FUNCTION fn_quartas(@grupo CHAR(1))
+RETURNS @table TABLE(
+nomeTime VARCHAR(100)
+)
+AS
+BEGIN
+	INSERT INTO @table
+	SELECT TOP (2) nomeTime FROM fn_placarGrupo(@grupo) ORDER BY pontos DESC, vitorias DESC, gols_marcados DESC, saldo_gols DESC
+	RETURN
+END
+
+
+SELECT * FROM fn_quartas('A')
+
+--INSERIR RESULTADOS
+CREATE PROCEDURE sp_resultado(@nomeTimeA VARCHAR(100), @nomeTimeB VARCHAR(100), @golsTimeA INT, @golsTimeB INT)
+AS
+	DECLARE @codigoTimeA INT,
+			@codigoTimeB INT
+
+	SET @codigoTimeA = (SELECT CodigoTime FROM Times WHERE NomeTime = @nomeTimeA)
+	SET @codigoTimeB = (SELECT CodigoTime FROM Times WHERE NomeTime = @nomeTimeB)
+
+	UPDATE Jogos
+	SET GolsTimeA = @golsTimeA, GolsTimeB = @golsTimeB
+	WHERE CodigoTimeA = @codigoTimeA AND CodigoTimeB = @codigoTimeB 
+
+
+
+EXEC pro_partidasT1
+select * from jogos
+drop table jogos
+
 
 --VIEW QUE ORGANIZA OS TIMES NA MESMA COLUNA E VAI SER USADA NA fn_placarGrupo
 CREATE VIEW v_jogos_disputados
