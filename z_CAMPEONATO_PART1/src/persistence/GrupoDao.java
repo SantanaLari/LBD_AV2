@@ -27,6 +27,10 @@ public class GrupoDao implements IGrupoDao {
 		CallableStatement cs = c.prepareCall(sql);
 		cs.execute();
 		String saida = "Grupos gerados";
+		
+		JogosDao jd = new JogosDao(gDao);
+		jd.criarJogos();
+		
 		return saida;
 	}
 
