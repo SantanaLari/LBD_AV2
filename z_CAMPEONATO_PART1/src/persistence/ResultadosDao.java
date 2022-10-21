@@ -19,14 +19,15 @@ public class ResultadosDao implements IResultadosDao {
 	}
 	
 	@Override
-	public String insereResultados(String nomeTimeA, String nomeTimeB, int golsTimeA, int golsTimeB) throws SQLException, ClassNotFoundException {
+	public String insereResultados(String nomeTimeA, String nomeTimeB, int golsTimeA, int golsTimeB, String data) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "EXEC sp_resultado ?, ?, ?, ?";
+		String sql = "{CALL sp_resultados ?, ?, ?, ?, ?} ";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, nomeTimeA);
 		cs.setString(2, nomeTimeB);
 		cs.setInt(3, golsTimeA);
 		cs.setInt(4, golsTimeB);
+		cs.setString(5, data);
 		cs.execute();
 		cs.close();
 		
@@ -62,3 +63,4 @@ public class ResultadosDao implements IResultadosDao {
 	}
 
 }
+
