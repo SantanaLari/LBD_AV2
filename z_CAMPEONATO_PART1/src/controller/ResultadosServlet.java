@@ -31,6 +31,7 @@ public class ResultadosServlet extends HttpServlet {
 		String saida = "";
 		String nomeTimeA = "";
 		String nomeTimeB = "";
+		String data = "";
 		int golsTimeA = 0;
 		int golsTimeB = 0;
 		
@@ -43,11 +44,12 @@ public class ResultadosServlet extends HttpServlet {
 		
 		try {
 			if(botao.contains("Inserir Resultado")) {
-				nomeTimeA = request.getParameter("nomeTimeA");
-				nomeTimeB = request.getParameter("nomeTimeB");
-				golsTimeA = Integer.parseInt(request.getParameter("golsTimeA"));
-				golsTimeB = Integer.parseInt(request.getParameter("golsTimeB"));
-				saida = rDao.insereResultados(nomeTimeA, nomeTimeB, golsTimeA, golsTimeB);
+				data = request.getParameter("Data");
+				nomeTimeA = request.getParameter("TimeA");
+				nomeTimeB = request.getParameter("TimeB");
+				golsTimeA = Integer.parseInt(request.getParameter("golsA"));
+				golsTimeB = Integer.parseInt(request.getParameter("golsB"));
+				saida = rDao.insereResultados(nomeTimeA, nomeTimeB, golsTimeA, golsTimeB, data);
 			}
 			if(botao.contains("Listar Resultados")) {
 				jogos = rDao.consultaResultados();
@@ -71,6 +73,7 @@ public class ResultadosServlet extends HttpServlet {
 		String saida = "";
 		String nomeTimeA = "";
 		String nomeTimeB = "";
+		String data = "";
 		int golsTimeA = 0;
 		int golsTimeB = 0;
 		
@@ -83,11 +86,12 @@ public class ResultadosServlet extends HttpServlet {
 		
 		try {
 			if(botao.contains("Inserir Resultado")) {
-				nomeTimeA = request.getParameter("nomeTimeA");
-				nomeTimeB = request.getParameter("nomeTimeB");
-				golsTimeA = Integer.parseInt(request.getParameter("golsTimeA"));
-				golsTimeB = Integer.parseInt(request.getParameter("golsTimeB"));
-				saida = rDao.insereResultados(nomeTimeA, nomeTimeB, golsTimeA, golsTimeB);
+				data = request.getParameter("data");
+				nomeTimeA = request.getParameter("TimeA");
+				nomeTimeB = request.getParameter("TimeB");
+				golsTimeA = Integer.parseInt(request.getParameter("golsA"));
+				golsTimeB = Integer.parseInt(request.getParameter("golsB"));
+				saida = rDao.insereResultados(nomeTimeA, nomeTimeB, golsTimeA, golsTimeB, data);
 			}
 			if(botao.contains("Listar Resultados")) {
 				jogos = rDao.consultaResultados();
@@ -106,3 +110,4 @@ public class ResultadosServlet extends HttpServlet {
 	}
 
 }
+
