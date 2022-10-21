@@ -18,6 +18,17 @@ private GenericDao gDao;
 	}
 	
 	@Override
+	public String criarJogos() throws SQLException, ClassNotFoundException {
+		Connection c = gDao.getConnection();
+		String sql = "{CALL pro_partidasT1}";
+		CallableStatement cs = c.prepareCall(sql);
+		cs.execute();
+		String saida = "Jogos gerados";
+		
+		return saida;
+	}
+	
+	@Override
 	public String excluirJogos() throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "DELETE jogos";
