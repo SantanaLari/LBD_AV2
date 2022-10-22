@@ -84,6 +84,8 @@ SET @time = 5
 		SET @time = @time + 1
 	END
 
+	EXEC pro_partidasT1
+
 ---------------------------------------------------------------------------------------------------
 CREATE PROCEDURE p_geraGrupo
 AS
@@ -117,16 +119,8 @@ SET @time = 0
 			INSERT INTO grupos VALUES
 			(@grupo, @time)
 		END
-
-		IF @rand = 1
-		BEGIN
-			EXEC p_geraGrupos_1 @grupo1 = 'A', @grupo2 = 'B', @grupo3 = 'C', @grupo4 = 'D'
-		END
-		ELSE
-		IF @rand = 2
-		BEGIN
-			EXEC p_geraGrupos_1 @grupo1 = 'C', @grupo2 = 'D', @grupo3 = 'A', @grupo4 = 'B'
-		END
+			EXEC p_geraGrupos_1 @grupo1 = 'C', @grupo2 = 'D', @grupo3 = 'A', @grupo4 = 'B'			
+-------------------------------------------------------------------------------------------------------
 
 EXEC p_geraGrupo
 DELETE grupos
