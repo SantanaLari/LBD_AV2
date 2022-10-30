@@ -19,6 +19,7 @@ private GenericDao gDao;
 	
 	@Override
 	public String criarJogos() throws SQLException, ClassNotFoundException {
+		excluirJogos();
 		Connection c = gDao.getConnection();
 		String sql = "{CALL pro_partidasT1}";
 		CallableStatement cs = c.prepareCall(sql);
