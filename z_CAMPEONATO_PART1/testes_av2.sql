@@ -84,8 +84,6 @@ SET @time = 5
 		SET @time = @time + 1
 	END
 
-	EXEC pro_partidasT1
-
 ---------------------------------------------------------------------------------------------------
 CREATE PROCEDURE p_geraGrupo
 AS
