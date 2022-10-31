@@ -30,22 +30,22 @@ PRIMARY KEY(CodigoTimeA, CodigoTimeB)
 )
 go
 INSERT INTO times VALUES
-(1, 'Corinthians', 'S„o Paulo', 'Neo QuÌmica Arena'),
-(2, 'Palmeiras', 'S„o Paulo', 'Allanz Parque'),
+(1, 'Corinthians', 'S√£o Paulo', 'Neo Qu√≠mica Arena'),
+(2, 'Palmeiras', 'S√£o Paulo', 'Allanz Parque'),
 (3, 'Santos', 'Santos', 'Vila Belmiro'),
-(4, 'S„o Paulo', 'S„o Paulo', 'Morumbi'),
-(5, 'Botafogo-SP', 'Ribeir„o Preto', 'Santa Cruz'),
-(6, 'Ferrovi·ria', 'Araraquara', 'Fonte Luminosa'),
+(4, 'S√£o Paulo', 'S√£o Paulo', 'Morumbi'),
+(5, 'Botafogo-SP', 'Ribeir√£o Preto', 'Santa Cruz'),
+(6, 'Ferrovi√°ria', 'Araraquara', 'Fonte Luminosa'),
 (7, 'Guarani', 'Campinas', 'Brinco de Ouro'),
-(8, 'Inter de Limeira', 'Limeira', 'Limeir„o'),
-(9, 'Ituano', 'Itu', 'Novelli J˙nior'),
-(10, 'Mirassol', 'Mirassol', 'JosÈ Maria de Campos Maia'),
+(8, 'Inter de Limeira', 'Limeira', 'Limeir√£o'),
+(9, 'Ituano', 'Itu', 'Novelli J√∫nior'),
+(10, 'Mirassol', 'Mirassol', 'Jos√© Maria de Campos Maia'),
 (11, 'Novorizontino', 'Novo Horizonte', 'Jorge Ismael de Biasi'),
-(12, 'Ponte Preta', 'Campinas', 'MoisÈs Lucarelli'),
-(13, 'Red Bull Bragantino', 'BraganÁa Paulista', 'Nabi Abi Chedid'),
-(14, 'Santo AndrÈ', 'Santo AndrÈ', 'Bruno JosÈ Daniel'),
-(15, 'S„o Bento', 'Sorocaba', 'Walter Ribeiro'),
-(16, 'S„o Caetano', 'S„o Caetano do Sul', 'Anacletto Campanella')
+(12, 'Ponte Preta', 'Campinas', 'Mois√©s Lucarelli'),
+(13, 'Red Bull Bragantino', 'Bragan√ßa Paulista', 'Nabi Abi Chedid'),
+(14, 'Santo Andr√©', 'Santo Andr√©', 'Bruno Jos√© Daniel'),
+(15, 'S√£o Bento', 'Sorocaba', 'Walter Ribeiro'),
+(16, 'S√£o Caetano', 'S√£o Caetano do Sul', 'Anacletto Campanella')
 
 CREATE PROCEDURE p_geraGrupos_1 (@grupo1 CHAR(1), @grupo2 CHAR(1), 
 								 @grupo3 CHAR(1), @grupo4 CHAR(1))
@@ -127,7 +127,7 @@ SET @time = 0
 CREATE PROCEDURE pd_data(@data DATE)
 AS
 	DECLARE @aux DATE
-	--Se for domingo, prÛximo dia de jogo È daqui a 3 dias
+	--Se for domingo, pr√≥ximo dia de jogo √© daqui a 3 dias
 	IF(DATEPART(WEEKDAY, @data) = 1) 
 	BEGIN
 		SET @aux = DATEADD(DAY, 3, @data)
@@ -135,7 +135,7 @@ AS
 		SET @data = @aux
 		PRINT @data  
 	END
-	--Se for quarta-feira, prÛximo dia de jogo È daqui a 4 dias
+	--Se for quarta-feira, pr√≥ximo dia de jogo √© daqui a 4 dias
 	ELSE
 	BEGIN
 		SET @aux = DATEADD(DAY, 4, @data)
@@ -242,7 +242,7 @@ AS
 SET @cont1 = 5	
 SET @dataUltimo = '23/02/2022'
 
---CABE«AS
+--CABE√áAS
 	INSERT INTO jogos VALUES
 	(1,2,NULL,NULL,'06/02/2022'),
 	(1,3,NULL,NULL,'09/02/2022'),
@@ -441,7 +441,7 @@ AS BEGIN
 END
 
 
---FUN«√O QUE MOSTRA A CLASSIFICA«√O GERAL
+--FUN√á√ÉO QUE MOSTRA A CLASSIFICA√á√ÉO GERAL
 CREATE FUNCTION fn_placarGeral()
 RETURNS @pGeral TABLE (
 nomeTime VARCHAR(50),
@@ -489,7 +489,7 @@ BEGIN
 END
 
 --INSERIR RESULTADOS
-CREATE PROCEDURE sp_Resultados1(@nomeTimeA VARCHAR(100), @nomeTimeB VARCHAR(100), @golsTimeA INT, @golsTimeB INT, @data DATE)
+CREATE PROCEDURE sp_resultado(@nomeTimeA VARCHAR(100), @nomeTimeB VARCHAR(100), @golsTimeA INT, @golsTimeB INT)
 AS
 	DECLARE @codigoTimeA INT,
 			@codigoTimeB INT
@@ -499,38 +499,38 @@ AS
 
 	UPDATE Jogos
 	SET GolsTimeA = @golsTimeA, GolsTimeB = @golsTimeB
-	WHERE CodigoTimeA = @codigoTimeA AND CodigoTimeB = @codigoTimeB AND Data = @data
+	WHERE CodigoTimeA = @codigoTimeA AND CodigoTimeB = @codigoTimeB
 
 
 EXEC pro_partidasT1
 select * from jogos
 drop table jogos
 
-EXEC sp_Resultados1 'Corinthians', 'Palmeiras', 1, 2, '06/02/2022'
+EXEC sp_Resultados1 'Corinthians', 'Palmeiras', 1, 2
 
---TRIGGER QUE N√O PERMITE INSERT, UPDATE e DELETE NA TABELA TIMES
+--TRIGGER QUE N√ÉO PERMITE INSERT, UPDATE e DELETE NA TABELA TIMES
 CREATE TRIGGER t_times ON times
 FOR INSERT, UPDATE, DELETE
 AS
 BEGIN
 	ROLLBACK TRANSACTION
-	RAISERROR('Esta aÁ„o n„o È permitida para a tabela Times', 16, 1)
+	RAISERROR('Esta a√ß√£o n√£o √© permitida para a tabela Times', 16, 1)
 END
 
---TRIGGER QUE N√O PERMITE INSERT, UPDATE e DELETE NA TABELA GRUPOS
+--TRIGGER QUE N√ÉO PERMITE INSERT, UPDATE e DELETE NA TABELA GRUPOS
 CREATE TRIGGER t_grupos ON grupos
 FOR INSERT, UPDATE, DELETE
 AS
 BEGIN
 	ROLLBACK TRANSACTION
-	RAISERROR('Esta aÁ„o n„o È permitida para a tabela Grupos', 16, 1)
+	RAISERROR('Esta a√ß√£o n√£o √© permitida para a tabela Grupos', 16, 1)
 END
 
---TRIGGER QUE N√O PERMITE INSERTE e DELETE NA TABELA JOGOS
+--TRIGGER QUE N√ÉO PERMITE INSERTE e DELETE NA TABELA JOGOS
 CREATE TRIGGER t_jogos ON jogos
 FOR INSERT, DELETE
 AS
 BEGIN
 	ROLLBACK TRANSACTION
-	RAISERROR('Esta aÁ„o n„o È permitida para a tabela Jogos', 16, 1)
+	RAISERROR('Esta a√ß√£o n√£o √© permitida para a tabela Jogos', 16, 1)
 END
